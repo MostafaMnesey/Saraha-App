@@ -11,4 +11,5 @@ router.get(
   authMiddleware(),
   userService.getUser
 );
+
 export default router;

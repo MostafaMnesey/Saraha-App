@@ -205,6 +205,8 @@ export const confirmEmail = asyncHandler(async (req, res, next) => {
   });
 });
 
+
+
 export const loginGoogle = asyncHandler(async (req, res, next) => {
   const { idToken } = req.body;
   const { email, email_verified } = await verify(idToken);
