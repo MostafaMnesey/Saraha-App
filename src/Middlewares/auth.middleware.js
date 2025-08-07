@@ -1,10 +1,11 @@
 import { asyncHandler } from "../utils/response.js";
-import { decodeToken } from "../utils/token.js";
+import { decodeToken, tokenTypeEnum } from "../utils/token.js";
 
 export const authMiddleware = () => {
   return asyncHandler(async (req, res, next) => {
     req.user = await decodeToken({
       authorization: req.headers.authorization,
+      tokenType: tokenTypeEnum.access,
       next,
     });
 

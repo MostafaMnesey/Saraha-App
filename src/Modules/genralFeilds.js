@@ -1,4 +1,5 @@
 import joi from "joi";
+import { Types } from "mongoose";
 
 export const genralFeilds = {
   fullName: joi.string().min(2).max(20).messages({
@@ -28,4 +29,10 @@ export const genralFeilds = {
     .string()
     .pattern(new RegExp(/^\d{6}$/))
     .required(),
+  id: joi.string().custom((value, helpers) => {
+
+    return Types.ObjectId.isValid(value)
+      ? true
+      : helpers.message("invalid mongodb id");
+  }),
 };

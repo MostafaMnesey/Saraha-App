@@ -26,7 +26,7 @@ async function verify(idToken) {
   return payload;
 }
 
-const getLogindata = async (user) => {
+export const getLogindata = async (user) => {
   const getSignature = await getSignatures({
     signatureLevel:
       user.role != roleEnum.user
@@ -204,8 +204,6 @@ export const confirmEmail = asyncHandler(async (req, res, next) => {
     res,
   });
 });
-
-
 
 export const loginGoogle = asyncHandler(async (req, res, next) => {
   const { idToken } = req.body;
