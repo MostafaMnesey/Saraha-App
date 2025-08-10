@@ -1,9 +1,9 @@
- export const emailTemp = async ({ otp = "" }) => {
+export const emailTemp = async ({ otp = "", title = "Confirmation" }) => {
   return `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Email Confirmation</title>
+    <title>${title}</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -121,7 +121,7 @@
       </div>
 
       <div class="content">
-        <h1>Email Confirmation</h1>
+        <h1>${title}</h1>
         <p>Click the button below to verify your email address:${otp}</p>
         
       </div>

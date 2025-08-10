@@ -23,4 +23,18 @@ router.patch(
   authService.confirmEmail
 );
 
+router.patch(
+  "/send-forgot-password",
+  validation(authValidation.sendForgotPassword),
+  authService.sendForgotPassword
+);
+
+router.post(
+  "/verify-forgot-password",
+  validation(authValidation.confirmEmail),
+  authService.verifyForgotPassword
+);
+
+router.patch("/reset-password", validation(authValidation.resetPassword) ,authService.resetPassword);
+
 export default router;

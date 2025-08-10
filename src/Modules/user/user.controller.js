@@ -22,4 +22,18 @@ router.get(
   userService.shareProfile
 );
 
+router.patch(
+  "/update",
+  authMiddleware(),
+  validation(userValidation.updateUserBasic),
+  userService.updateUserBasic
+);
+
+router.patch(
+  "/update-password",
+  authMiddleware(),
+  validation(userValidation.updatePassword),
+  userService.updatePassword
+);
+
 export default router;

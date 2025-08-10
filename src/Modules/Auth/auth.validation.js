@@ -37,3 +37,18 @@ export const googleService = {
     idToken: joi.string().required(),
   }),
 };
+
+export const sendForgotPassword = {
+  body: joi.object().keys({
+    email: genralFeilds.email.required(),
+  }),
+};
+
+export const resetPassword = {
+  body: joi.object().keys({
+    otp: genralFeilds.otp.required(),
+    email: genralFeilds.email.required(),
+    password: genralFeilds.password.required(),
+    confirmPassword: genralFeilds.confirmPassword.required(),
+  }),
+};

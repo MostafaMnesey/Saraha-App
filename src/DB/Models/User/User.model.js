@@ -64,6 +64,7 @@ const userSchema = new mongoose.Schema(
     confirmEmail: Date,
     confirmEmailOtp: String,
     picture: String,
+    forgetCode: String,
   },
   {
     timestamps: true,

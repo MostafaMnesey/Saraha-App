@@ -7,7 +7,19 @@ const eventEmitter = new EventEmitter();
 eventEmitter.on(
   "sendEmail",
   asyncHandler(async ({ email = "", otp = "", subject = "Confirmation" }) => {
-    const html = await emailTemp({otp});
+    const html = await emailTemp({ otp });
+    await sendEmail({
+      to: email,
+      subject,
+      html,
+    });
+  })
+);
+
+eventEmitter.on(
+  "forget-password",
+  asyncHandler(async ({ email = "", otp = "", subject = "Confirmation" }) => {
+    const html = await emailTemp({ otp, title: "Reset Password" });
     await sendEmail({
       to: email,
       subject,

@@ -32,3 +32,18 @@ export const updateOne = async ({
 } = {}) => {
   return await model.updateOne(filter, data, optaions);
 };
+export const findOneAndUpdate = async ({
+  model,
+  optaions = { runVaildators: true, new: true },
+  filter = {},
+  data = {
+   
+  },
+  select = "",
+  populate = "",
+} = {}) => {
+  return await model
+    .findOneAndUpdate(filter, data, optaions)
+    .select(select)
+    .populate(populate);
+};

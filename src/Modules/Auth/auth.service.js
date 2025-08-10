@@ -230,3 +230,88 @@ export const loginGoogle = asyncHandler(async (req, res, next) => {
     data,
   });
 });
+
+export const sendForgotPassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  const otp = customAlphabet("01234567", 6)();
+
+  const hashedOtp = await hashText({ text: otp });
+
+  const user = await DbService.findOneAndUpdate({
+    model: UserModel,
+    filter: { email, confirmEmail: { $exists: true } },
+    data: {
+      $set: {
+        forgetCode: hashedOtp,
+      },
+    },
+  });
+
+  eventEmitter.emit("forget-password", {
+    email,
+    otp,
+    subject: "Password Reset",
+  });
+
+  return user
+    ? succssesResponse({ res, message: "Success" })
+    : next(new Error("User not found", { cause: 404 }));
+});
+
+export const verifyForgotPassword = asyncHandler(async (req, res, next) => {
+  const { email, otp } = req.body;
+
+  const user = await DbService.findOne({
+    model: UserModel,
+    filter: {
+      email,
+      forgetCode: { $exists: true },
+      confirmEmail: { $exists: true },
+    },
+  });
+  if (!(await compareText({ text: otp, hashedText: user.forgetCode }))) {
+    return next(new Error("invalid OTP", { cause: 401 }));
+  }
+
+  return user
+    ? succssesResponse({ res, message: "Success" })
+    : next(new Error("User not found", { cause: 404 }));
+});
+
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  const { email, otp, password } = req.body;
+
+  const user = await DbService.findOne({
+    model: UserModel,
+    filter: {
+      email,
+      forgetCode: { $exists: true },
+      confirmEmail: { $exists: true },
+    },
+  });
+  if (!user) {
+    return next(new Error("User not found", { cause: 404 }));
+  }
+  if (!(await compareText({ text: otp, hashedText: user.forgetCode }))) {
+    return next(new Error("invalid OTP", { cause: 401 }));
+  }
+
+  const hashedPassword = await hashText({ text: password });
+  const updatedUser = await DbService.updateOne({
+    model: UserModel,
+    filter: { email },
+    data: {
+      $set: {
+        password: hashedPassword,
+      },
+      $inc: {
+        __v: 1,
+      },
+      $unset: { forgetCode: 1 },
+    },
+  });
+
+  return user
+    ? succssesResponse({ res, message: "Success" })
+    : next(new Error("User not found", { cause: 404 }));
+});

@@ -24,7 +24,7 @@ export const genralFeilds = {
     "string.empty": "confirmPassword is required",
     "any.only": "confirmPassword must match password",
   }),
-  phone: joi.string().min(10).max(10),
+  phone: joi.string().min(11).max(11),
   otp: joi
     .string()
     .pattern(new RegExp(/^\d{6}$/))
